@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+    </style>
+    <title>Minesweeper Solver</title>
+    <!-- include the style -->
+    <link rel="stylesheet" href="J:\JavaScript - School\alertify\alertify.min.css" />
+    <!-- include a theme -->
+    <link rel="stylesheet" href="J:\JavaScript - School\alertify\themes\default.min.css" />
+    <link rel="icon" href="images\mineicon.png">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="J:\JavaScript - School\alertify\alertify.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="damka.css">
+</head>
+
+<body class="example" style="cursor: default;">
+    <center>
+        <!--Analog-type font-->
+        <p align="left" style="font-size:20px;color:#ff0000;margin-left:0.5%;cursor:not-allowed;">
+        <h5 id="MineCounter"></h5>
+        </p>
+        <p align="left" style="font-size:20px;color:#ff0000;margin-left:0.5%;cursor: not-allowed;">
+        <h5 id="MineLeft"></h5>
+        </p>
+
+
+        <!--Board paragraph-->
+        <p id="Board" class="GameBoard noselect" style="cursor: pointer;">
+
+
+
+        </p>
+
+        <center>
+            <!--game buttons-->
+            <button class="btn-alon btn-warning " onclick="FindMinesMain()"> Find Mines</button>
+            <br />
+            <br />
+            <button class="btn-rr btn-danger" onclick="Restart()">Restart</button>
+        </center>
+    </center>
+    <!--Setting Modal Button-->
+    <button type="button" style="outline:none; position:fixed; bottom:3px; " class="btn btn-info btn-lg"
+        data-toggle="modal" data-target="#myModal">⚙️</button>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!--close button-->
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Game Settings: </h3>
+                </div>
+                <div class="modal-body">
+                    <!--input bars with IDs so js can get user inserted input-->
+                    <label>Row Amount:</label> <br />
+                    <input type="number" value="9" id="Row"><br />
+                    <label>Column Amount:</label><br />
+                    <input type="number" value="9" id="Col"> <br />
+                    <label>Mine Amount:</label> <br />
+                    <input type="number" value="10" id="Mines"> <br />
+                    <label>Cell Size:</label> <br />
+                    <input type="number" value="40" id="CellSize"> <br />
+
+                    <!--dropdown content to demonstrate common cell size-->
+                    <div class="dropdown">
+                        <span><small>In pixels, it is recommended that you choose a value between 20-90</small></span>
+                        <div class="dropdown-content GameBoard">
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:20px; height:20px;font-size:60%;'>20</td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:30px; height:30px;font-size:80%;'>30 </td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:40px; height:40px'> 40</td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:50px; height:50px'>50 </td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:60px; height:60px'> 60</td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:70px; height:70px'> 70</td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:80px; height:80px'>80 </td>
+                            </table>
+                            <table style='background-color:#BDBDBD;' border='3'>
+                                <td style='width:90px; height:90px'>90 </td>
+                            </table>
+
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <!--audio bar to control volume and to play music, 
+                        has a error message incase browser doesn't support this kind of audio-->
+                    <audio src="mstheme.mp3" controls autoplay loop="true" volume="0.1">
+                        <p>If you are reading this, it is because your browser does not support the audio element.</p>
+                    </audio>
+                    <br />
+                    <!--button to send all user entered info to the JS code-->
+                    <button type="button" class="btn btn-primary btn-lg" onclick="ChangeValues()"
+                        style="outline:none;">Apply</button>
+                    <!--Opens a new tab with user guide on user's browser-->
+                    <a type="button" class="btn btn-link btn-lg" href="UserGuide.html" target=”_blank”>User Guide</a>
+
+                    <!--close button for modal-->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal"
+                            style="outline:none;">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--makes JS code known to html page-->
+        <script src="Minesweeper1.js"></script>
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+                authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+                projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+                storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+                messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+                appId: process.env.REACT_APP_FIREBASE_APP_ID,
+                measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+        </script>
+</body>
+
+</html>
